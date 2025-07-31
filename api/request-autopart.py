@@ -6,6 +6,7 @@ import json
 import psycopg2
 import requests
 from flask import Flask, request, jsonify
+from urllib.parse import urlparse, parse_qs
 
 def get_env_var(*names, default=None):
     for name in names:
@@ -14,6 +15,22 @@ def get_env_var(*names, default=None):
             return value
     return default
 
+def parse_postgres_url(url):
+    # Example: postgres://user:pass@host:port/dbname?sslmode=require
+    result = urlparse(url)
+    user = result.username
+    password = result.password
+    host = result.hostname
+    port = result.port or 5432
+    dbname = result.path.lstrip('/')
+    return {
+        'user': user,
+        'password': password,
+        'host': host,
+        'port': port,
+        'dbname': dbname
+    }
+
 app = Flask(__name__)
 
 @app.route('/api/request-autopart', methods=['POST'])
@@ -21,19 +38,32 @@ def request_autopart():
     try:
         data = request.get_json()
         # Connect to PostgreSQL using environment variables
-        dbname = get_env_var("PGDATABASE", "POSTGRES_DATABASE")
-        user = get_env_var("PGUSER", "POSTGRES_USER")
-        password = get_env_var("PGPASSWORD", "POSTGRES_PASSWORD")
-        host = get_env_var("PGHOST", "POSTGRES_HOST", "POSTGRES_URL_NON_POOLING", "POSTGRES_PRISMA_URL")
-        port = int(get_env_var("PGPORT", default=5432))
-        print(f"[DEBUG] Connecting to DB host={host} dbname={dbname} user={user} port={port}")
-        conn = psycopg2.connect(
-            dbname=dbname,
-            user=user,
-            password=password,
-            host=host,
-            port=port
-        )
+        # Prefer connection string if available
+        conn_url = get_env_var("POSTGRES_PRISMA_URL", "POSTGRES_URL_NON_POOLING")
+        if conn_url:
+            pg = parse_postgres_url(conn_url)
+            print(f"[DEBUG] Connecting to DB (URL) host={pg['host']} dbname={pg['dbname']} user={pg['user']} port={pg['port']}")
+            conn = psycopg2.connect(
+                dbname=pg['dbname'],
+                user=pg['user'],
+                password=pg['password'],
+                host=pg['host'],
+                port=pg['port']
+            )
+        else:
+            dbname = get_env_var("PGDATABASE", "POSTGRES_DATABASE")
+            user = get_env_var("PGUSER", "POSTGRES_USER")
+            password = get_env_var("PGPASSWORD", "POSTGRES_PASSWORD")
+            host = get_env_var("PGHOST", "POSTGRES_HOST")
+            port = int(get_env_var("PGPORT", default=5432))
+            print(f"[DEBUG] Connecting to DB (ENV) host={host} dbname={dbname} user={user} port={port}")
+            conn = psycopg2.connect(
+                dbname=dbname,
+                user=user,
+                password=password,
+                host=host,
+                port=port
+            )
         cur = conn.cursor()
         cur.execute('''
             INSERT INTO autopart_requests (
