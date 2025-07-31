@@ -35,11 +35,11 @@ def parse_postgres_url(url):
 app = Flask(__name__)
 
 @app.route('/api/request-autopart', methods=['POST'])
-def log_debug(msg, *args):
-    print(f"[DEBUG] {msg}", *args, flush=True)
+def log_debug(*args):
+    print("[DEBUG]", *args, flush=True)
 
-def log_error(msg, *args):
-    print(f"[ERROR] {msg}", *args, flush=True)
+def log_error(*args):
+    print("[ERROR]", *args, flush=True)
 
 def hubspot_request(method, url, headers, payload=None, max_retries=3, retry_delay=1):
     for attempt in range(1, max_retries + 1):
