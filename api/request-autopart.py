@@ -1,15 +1,22 @@
+
+# Vercel-compatible Python handler (no Flask)
 import os
 import json
 import psycopg2
 import requests
-from flask import Flask, request, jsonify
 
-app = Flask(__name__)
-
-@app.route('/api/request-autopart', methods=['POST'])
-def request_autopart():
+def handler(event, context):
     try:
-        data = request.get_json()
+        # Parse JSON body
+        if 'body' in event:
+            data = json.loads(event['body'])
+        else:
+            return {
+                "statusCode": 400,
+                "headers": {"Content-Type": "application/json"},
+                "body": json.dumps({"error": "No body in request."})
+            }
+
         # Connect to PostgreSQL using environment variables
         conn = psycopg2.connect(
             dbname=os.environ.get("PGDATABASE"),
@@ -42,7 +49,11 @@ def request_autopart():
         # --- HubSpot Integration ---
         HUBSPOT_TOKEN = os.environ.get("HUBSPOT_TOKEN")
         if not HUBSPOT_TOKEN:
-            return jsonify({"error": "HubSpot token not set in environment variables."}), 500
+            return {
+                "statusCode": 500,
+                "headers": {"Content-Type": "application/json"},
+                "body": json.dumps({"error": "HubSpot token not set in environment variables."})
+            }
         headers = {
             "Authorization": f"Bearer {HUBSPOT_TOKEN}",
             "Content-Type": "application/json"
@@ -110,6 +121,14 @@ def request_autopart():
             message = "Thank you. Your request has been received. We will get back to you soon."
         else:
             message = "Gracias. Tu solicitud ha sido recibida. Te responderemos en breve."
-        return jsonify({"message": message}), 200
+        return {
+            "statusCode": 200,
+            "headers": {"Content-Type": "application/json"},
+            "body": json.dumps({"message": message})
+        }
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        return {
+            "statusCode": 500,
+            "headers": {"Content-Type": "application/json"},
+            "body": json.dumps({"error": str(e)})
+        }
