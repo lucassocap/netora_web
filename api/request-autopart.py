@@ -1,10 +1,18 @@
 
 # Minimal Flask app for Vercel Python API compatibility
+
 import os
 import json
 import psycopg2
 import requests
 from flask import Flask, request, jsonify
+
+def get_env_var(*names, default=None):
+    for name in names:
+        value = os.environ.get(name)
+        if value:
+            return value
+    return default
 
 app = Flask(__name__)
 
@@ -14,11 +22,11 @@ def request_autopart():
         data = request.get_json()
         # Connect to PostgreSQL using environment variables
         conn = psycopg2.connect(
-            dbname=os.environ.get("PGDATABASE"),
-            user=os.environ.get("PGUSER"),
-            password=os.environ.get("PGPASSWORD"),
-            host=os.environ.get("PGHOST"),
-            port=os.environ.get("PGPORT", 5432)
+            dbname=get_env_var("PGDATABASE", "POSTGRES_DATABASE"),
+            user=get_env_var("PGUSER", "POSTGRES_USER"),
+            password=get_env_var("PGPASSWORD", "POSTGRES_PASSWORD"),
+            host=get_env_var("PGHOST", "POSTGRES_HOST", "POSTGRES_URL_NON_POOLING", "POSTGRES_PRISMA_URL"),
+            port=int(get_env_var("PGPORT", default=5432))
         )
         cur = conn.cursor()
         cur.execute('''
