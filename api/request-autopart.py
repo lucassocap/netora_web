@@ -56,6 +56,7 @@ def hubspot_request(method, url, headers, payload=None, max_retries=3, retry_del
         time.sleep(retry_delay)
     return None
 
+@app.route('/api/request-autopart', methods=['POST'])
 def request_autopart():
     try:
         data = request.get_json()
