@@ -1,0 +1,48 @@
+{
+  "menu": {
+    "home": "Inicio",
+    "about": "Acerca de",
+    "faq": "Preguntas",
+    "games": "Juegos",
+    "news": "Noticias",
+    "contact": "Contacto",
+    "location": "Ubicación",
+    "pricing": "Precios",
+    "register": "Registrarse",
+    "login": "Iniciar sesión",
+    "knowledgebase": "Base de conocimiento",
+    "affliate": "Afiliado",
+    "makeRequest": "Solicitar",
+    "requestAutopart": "Solicitar Autoparte"
+  },
+  "language": {
+    "eng": "ENG",
+    "esp": "ESP"
+  },
+  "requestAutopart": {
+    "title": "Solicitar Autoparte",
+    "nombre_apellido": "Nombre y Apellido",
+    "telefono": "Teléfono / WhatsApp",
+    "numero_parte": "Número de parte",
+    "marca": "Marca del vehículo",
+    "modelo": "Modelo",
+    "anio": "Año",
+    "placa": "Placa",
+    "vin": "VIN",
+    "imagen": "Imagen del repuesto",
+    "correo": "Correo electrónico",
+    "submit": "Enviar",
+    "sending": "Enviando...",
+    "cancel": "Cancelar",
+    "description": "Completa el siguiente formulario para solicitar tu autoparte. Nos pondremos en contacto contigo pronto.",
+    "nombre_apellido_ph": "ej: Juan Pérez",
+    "telefono_ph": "ej: +52 1 55 1234 5678",
+    "numero_parte_ph": "ej: 1234-5678",
+    "marca_ph": "ej: Toyota",
+    "modelo_ph": "ej: Corolla",
+    "anio_ph": "ej: 2020",
+    "placa_ph": "ej: ABC-1234",
+    "vin_ph": "ej: 1HGCM82633A123456",
+    "correo_ph": "ej: juan@email.com"
+  }
+}

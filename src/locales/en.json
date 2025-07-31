@@ -1,0 +1,48 @@
+{
+  "menu": {
+    "home": "Home",
+    "about": "About",
+    "faq": "FAQ",
+    "games": "Games",
+    "news": "News",
+    "contact": "Contact",
+    "location": "Location",
+    "pricing": "Pricing",
+    "register": "Register",
+    "login": "Login",
+    "knowledgebase": "Knowledgebase",
+    "affliate": "Affiliate",
+    "makeRequest": "Make Request",
+    "requestAutopart": "Request Autopart"
+  },
+  "language": {
+    "eng": "ENG",
+    "esp": "ESP"
+  },
+  "requestAutopart": {
+    "title": "Request Autopart",
+    "nombre_apellido": "Full Name",
+    "telefono": "Phone / WhatsApp",
+    "numero_parte": "Part Number",
+    "marca": "Vehicle Brand",
+    "modelo": "Model",
+    "anio": "Year",
+    "placa": "License Plate",
+    "vin": "VIN",
+    "imagen": "Part Image",
+    "correo": "Email",
+    "submit": "Submit",
+    "sending": "Sending...",
+    "cancel": "Cancel",
+    "description": "Fill out the form below to request your car part. We will contact you soon.",
+    "nombre_apellido_ph": "e.g. John Doe",
+    "telefono_ph": "e.g. +1 555 123 4567",
+    "numero_parte_ph": "e.g. 1234-5678",
+    "marca_ph": "e.g. Toyota",
+    "modelo_ph": "e.g. Corolla",
+    "anio_ph": "e.g. 2020",
+    "placa_ph": "e.g. ABC-1234",
+    "vin_ph": "e.g. 1HGCM82633A123456",
+    "correo_ph": "e.g. john@email.com"
+  }
+}
