@@ -34,7 +34,7 @@ def parse_postgres_url(url):
 
 app = Flask(__name__)
 
-@app.route('/api/request-autopart', methods=['POST'])
+
 def log_debug(*args):
     print("[DEBUG]", *args, flush=True)
 
