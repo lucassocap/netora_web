@@ -42,8 +42,12 @@ npm start
 - All database columns use English metadata.
 
 ## HubSpot Integration (Planned)
-- Will add HubSpot API integration to the backend for CRM automation.
-- Requires a HubSpot API key/token and mapping of form fields to HubSpot properties.
+- The backend integrates with HubSpot to automatically create a contact and a deal for each autopart request.
+- You must set your HubSpot Private App token as an environment variable in Vercel:
+  - Go to your Vercel dashboard → Project Settings → Environment Variables.
+  - Add a variable named `HUBSPOT_TOKEN` with your HubSpot Private App token as the value.
+- The backend maps form fields to HubSpot contact and deal properties (e.g., email, firstname, phone, vehicle_brand, etc.).
+- No secrets or tokens are stored in the code or git history.
 
 ## Status
 - Supabase client and all frontend DB logic have been removed.
