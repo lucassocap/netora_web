@@ -1,22 +1,17 @@
 
-# Vercel-compatible Python handler (no Flask)
+# Minimal Flask app for Vercel Python API compatibility
 import os
 import json
 import psycopg2
 import requests
+from flask import Flask, request, jsonify
 
-def handler(event, context):
+app = Flask(__name__)
+
+@app.route('/api/request-autopart', methods=['POST'])
+def request_autopart():
     try:
-        # Parse JSON body
-        if 'body' in event:
-            data = json.loads(event['body'])
-        else:
-            return {
-                "statusCode": 400,
-                "headers": {"Content-Type": "application/json"},
-                "body": json.dumps({"error": "No body in request."})
-            }
-
+        data = request.get_json()
         # Connect to PostgreSQL using environment variables
         conn = psycopg2.connect(
             dbname=os.environ.get("PGDATABASE"),
@@ -49,11 +44,7 @@ def handler(event, context):
         # --- HubSpot Integration ---
         HUBSPOT_TOKEN = os.environ.get("HUBSPOT_TOKEN")
         if not HUBSPOT_TOKEN:
-            return {
-                "statusCode": 500,
-                "headers": {"Content-Type": "application/json"},
-                "body": json.dumps({"error": "HubSpot token not set in environment variables."})
-            }
+            return jsonify({"error": "HubSpot token not set in environment variables."}), 500
         headers = {
             "Authorization": f"Bearer {HUBSPOT_TOKEN}",
             "Content-Type": "application/json"
@@ -121,14 +112,6 @@ def handler(event, context):
             message = "Thank you. Your request has been received. We will get back to you soon."
         else:
             message = "Gracias. Tu solicitud ha sido recibida. Te responderemos en breve."
-        return {
-            "statusCode": 200,
-            "headers": {"Content-Type": "application/json"},
-            "body": json.dumps({"message": message})
-        }
+        return jsonify({"message": message}), 200
     except Exception as e:
-        return {
-            "statusCode": 500,
-            "headers": {"Content-Type": "application/json"},
-            "body": json.dumps({"error": str(e)})
-        }
+        return jsonify({"error": str(e)}), 500
