@@ -121,19 +121,12 @@ def request_autopart():
             "Authorization": f"Bearer {HUBSPOT_TOKEN}",
             "Content-Type": "application/json"
         }
-        # Map form fields to HubSpot contact properties
+        # Map form fields to HubSpot contact standard properties only
         contact_payload = {
             "properties": {
                 "email": data.get("correo"),
                 "firstname": data.get("nombre_apellido"),
-                "phone": data.get("telefono"),
-                "vehicle_brand": data.get("marca"),
-                "vehicle_model": data.get("modelo"),
-                "vehicle_year": data.get("anio"),
-                "license_plate": data.get("placa"),
-                "vin": data.get("vin"),
-                "part_number": data.get("numero_parte"),
-                "part_image": data.get("imagen_url")
+                "phone": data.get("telefono")
             }
         }
         contact_resp = hubspot_request("post", "https://api.hubapi.com/crm/v3/objects/contacts", headers, contact_payload)
@@ -144,18 +137,10 @@ def request_autopart():
             except Exception as e:
                 log_error(f"Failed to parse contact response JSON: {e}")
 
-        # Map form fields to HubSpot deal properties
+        # Map form fields to HubSpot deal standard properties only
         deal_payload = {
             "properties": {
-                "dealname": f"Autopart Request - {data.get('nombre_apellido', '')}",
-                "email": data.get("correo"),
-                "vehicle_brand": data.get("marca"),
-                "vehicle_model": data.get("modelo"),
-                "vehicle_year": data.get("anio"),
-                "license_plate": data.get("placa"),
-                "vin": data.get("vin"),
-                "part_number": data.get("numero_parte"),
-                "part_image": data.get("imagen_url")
+                "dealname": f"Autopart Request - {data.get('nombre_apellido', '')}"
             }
         }
         deal_resp = hubspot_request("post", "https://api.hubapi.com/crm/v3/objects/deals", headers, deal_payload)
